@@ -99,7 +99,6 @@ public class Botyta extends ListenerAdapter implements Listener {
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-        OffsetDateTime then = OffsetDateTime.now();
         String messageRaw = event.getMessage().getContentRaw();
 
         if(messageRaw.startsWith(prefix)) {
@@ -117,7 +116,6 @@ public class Botyta extends ListenerAdapter implements Listener {
                         break;
 
                     case "ping":
-                        event.getMessage().reply("Pong! - " + OffsetDateTime.now().compareTo(then) + " ms").queue();
                         break;
 
 
