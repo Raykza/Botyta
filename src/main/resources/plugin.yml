@@ -1,0 +1,8 @@
+name: Botyta
+version: 1.0
+main: me.tyza.Main
+commands:
+  btps:
+    description: Botyta TPS command
+    usage: /<command>
+    aliases: [botytatps]
