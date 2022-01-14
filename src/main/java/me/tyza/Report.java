@@ -1,5 +1,6 @@
 package me.tyza;
 
+// TODO: Print this as .json using gson
 public class Report {
     private int tps;
     private String date;
