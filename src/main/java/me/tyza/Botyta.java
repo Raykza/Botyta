@@ -1,8 +1,10 @@
 package me.tyza;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -19,21 +21,25 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class Botyta extends ListenerAdapter implements Listener {
+public class Botyta {
     public Main plugin;
     private JDA jda;
     private final ArrayList<TextChannel> botytaChannels;
     private final String[] botynames = {"botyta","ʙᴏᴛʏᴛᴀ","ᵇᵒᵗʸᵗᵃ","ｂｏｔｙｔａ"};
     private final String[] botystrings;
-    private final String prefix = "é Botyta"+" ";
-    private ConsoleCommandSender console = null;
+    public static final String PREFIX = "é Botyta"+" ";
+    private CommandManager commandManager;
+    private BotytaListener botytaListener;
 
     /* Instantiate main plugin, start bot. */
     public Botyta(Main plugin, String key, String[] strings) {
         this.plugin = plugin;
         this.botytaChannels = new ArrayList<TextChannel>();
         this.botystrings = strings;
+        this.commandManager = new CommandManager();
+        this.botytaListener = new BotytaListener(this.commandManager);
         this.startBot(key);
     }
 
@@ -43,7 +49,7 @@ public class Botyta extends ListenerAdapter implements Listener {
         try {
             JDABuilder builder;
             builder = JDABuilder.createDefault(key);
-            builder.addEventListeners(this);
+            builder.addEventListeners(botytaListener);
             builder.setActivity(Activity.listening("é Botyta"));
 
             jda = builder.build();
@@ -75,6 +81,7 @@ public class Botyta extends ListenerAdapter implements Listener {
 
     public void disableBot() {
         this.sendToBotytaChannel(botystrings[1]); // Botyta desactivado
+        this.jda.shutdown();
     }
 
     public void sendToBotytaChannel(String msg) {
@@ -83,49 +90,4 @@ public class Botyta extends ListenerAdapter implements Listener {
         }
     }
 
-    public void setConsoleCommandSender(ConsoleCommandSender consoleCommandSender) {
-        this.console = consoleCommandSender;
-    }
-
-    @Override
-    public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        if(!event.getName().equals("ping")) return;
-        long time = System.currentTimeMillis();
-        event.reply("Pong!").setEphemeral(true) // reply or acknowledge
-                .flatMap(v ->
-                        event.getHook().editOriginalFormat("Pong! - %d ms", System.currentTimeMillis() - time) // then edit original
-                ).queue(); // Queue both reply and edit
-    }
-
-    @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-        String messageRaw = event.getMessage().getContentRaw();
-
-        if(messageRaw.startsWith(prefix)) {
-            String[] args = messageRaw.substring(prefix.length(), messageRaw.length()).split(" ");
-            System.out.println("[Botyta] Discord user issued command " + messageRaw);
-            System.out.println("[Botyta] Parsed arguments: " + Arrays.toString(args));
-
-            String command = args[0];
-
-            if (command.isEmpty()) return;
-            else {
-                switch (command) {
-
-                    case "tps":
-                        break;
-
-                    case "ping":
-                        break;
-
-
-
-                    default:
-                        System.out.println("[Botyta] Issued unknown command " + args[0]);
-                        break;
-                }
-            }
-        }
-
-    }
 }

@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.Objects;
 
 public class Main extends JavaPlugin implements Listener {
+
     public Botyta botyta;
     public ConsoleCommandSender console;
     public ProtocolManager protocolManager;
@@ -35,14 +36,11 @@ public class Main extends JavaPlugin implements Listener {
         stringargs[1] = propertiesManager.getProperty("string_botyta_off");
 
         botyta = new Botyta(this, propertiesManager.getProperty("api"), stringargs);
-
         console = Bukkit.getServer().getConsoleSender();
         console.sendMessage("[Botyta] Botyta enabled!");
-        botyta.setConsoleCommandSender(console);
 
         Objects.requireNonNull(getCommand("btps")).setExecutor(new MinecraftTPSCommand());
         Bukkit.dispatchCommand(console,"timings on");
-
     }
 
     @Override

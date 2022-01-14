@@ -1,26 +1,24 @@
 package me.tyza;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
-
-
 public class Report {
     private int tps;
-    private String datetime;
+    private String date;
+    private String time;
 
 
-    public Report(int tps, String datetime)
+    public Report(int tps, String date, String time)
     {
         this.tps = tps;
-        this.datetime = datetime;
+        this.date = date;
+        this.time = time;
     }
 
     public int getTps() {
         return tps;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getDate() {
+        return date;
     }
+    public String getTime() { return time; }
 }
